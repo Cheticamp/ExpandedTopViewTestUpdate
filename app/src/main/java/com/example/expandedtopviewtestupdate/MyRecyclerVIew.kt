@@ -5,7 +5,6 @@ import android.support.v4.view.ViewCompat
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.util.AttributeSet
-import android.util.Log
 import android.view.View
 import android.view.ViewConfiguration
 
@@ -63,7 +62,6 @@ class MyRecyclerView @JvmOverloads constructor(context: Context, attrs: Attribut
 
     override fun fling(velocityX: Int, velocityY: Int): Boolean {
         var velocityY = velocityY
-        Log.d("Recycler", "<<<<velocity=" + velocityY)
         if (!mAppBarTracking!!.isAppBarIdle()) {
             val vc = ViewConfiguration.get(context)
             velocityY = if (velocityY < 0) -vc.scaledMinimumFlingVelocity

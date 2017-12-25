@@ -109,9 +109,4 @@ public class MainActivity extends AppCompatActivity implements MyRecyclerView.Ap
     public boolean isAppBarIdle() {
         return mAppBarIdle;
     }
-
-//    @Override
-//    public int getExpansionLeft() {
-//        return mAppBar.getBottom() - mAppBar.getHeight();
-//    }
 }

@@ -29,9 +29,11 @@ public class ScrollingCalendarBehavior extends AppBarLayout.Behavior {
         // Check to see if the app bar is expanded or this scroll will result in full expansion
         // and dispose of excess scroll if scrolling up.
         if (dy <= (child.getBottom() - child.getHeight())) {
-            consumed[1] += dy;
-            child.setExpanded(true, false);
-            Log.d("Behavior", "<<<<dy=" + dy + " consumed[1]=" + consumed[1] + " togo=" + (child.getBottom() - child.getHeight()));
+            if (dy != 0) { // Just scroll to appbar's fullest extent.
+                super.onNestedPreScroll(coordinatorLayout, child, target, dx,
+                                        child.getBottom() - child.getHeight(), consumed, type);
+            }
+            consumed[1] = dy;
         } else {
             super.onNestedPreScroll(coordinatorLayout, child, target, dx, dy, consumed, type);
         }
