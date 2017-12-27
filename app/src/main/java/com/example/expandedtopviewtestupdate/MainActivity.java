@@ -8,9 +8,11 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity implements MyRecyclerView.AppBarTracking {
     private MyRecyclerView mNestedView;
@@ -20,7 +22,8 @@ public class MainActivity extends AppCompatActivity implements MyRecyclerView.Ap
     private AppBarLayout mAppBar;
     private boolean mIsExpanded = false;
     private ImageView mArrowImageView;
-    private TextView mSmallerView;
+    private View mSmallerView;
+    private View smallLayoutContainer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,7 +40,8 @@ public class MainActivity extends AppCompatActivity implements MyRecyclerView.Ap
             }
         });
         mArrowImageView = findViewById(R.id.arrowImageView);
-        mSmallerView = findViewById(R.id.smallerView);
+        mSmallerView = findViewById(R.id.smallLayout);
+        smallLayoutContainer = findViewById(R.id.smallLayoutContainer);
         mNestedView = findViewById(R.id.nestedView);
         mNestedView.setAppBarTracking(this);
         mNestedView.setLayoutManager(new LinearLayoutManager(this));
@@ -79,16 +83,29 @@ public class MainActivity extends AppCompatActivity implements MyRecyclerView.Ap
                     setExpandAndCollapseEnabled(mIsExpanded);
                 }
                 mSmallerView.setAlpha((float) -verticalOffset / totalScrollRange);
+                smallLayoutContainer.setVisibility(progress <= 0 ? View.GONE : View.VISIBLE);
             }
         });
 
-        mArrowImageView.setOnClickListener(new View.OnClickListener()
+        findViewById(R.id.expandCollapseButton).setOnClickListener(new View.OnClickListener()
 
         {
             @Override
             public void onClick(View v) {
                 mIsExpanded = !mIsExpanded;
                 mAppBar.setExpanded(mIsExpanded, true);
+            }
+        });
+        findViewById(R.id.smallTextView).setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(final View v) {
+                Toast.makeText(MainActivity.this, "smallTextView clicked", Toast.LENGTH_SHORT).show();
+            }
+        });
+        findViewById(R.id.largeTextView).setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(final View v) {
+                Toast.makeText(MainActivity.this, "largeTextView clicked", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -109,9 +126,4 @@ public class MainActivity extends AppCompatActivity implements MyRecyclerView.Ap
     public boolean isAppBarIdle() {
         return mAppBarIdle;
     }
-
-//    @Override
-//    public int getExpansionLeft() {
-//        return mAppBar.getBottom() - mAppBar.getHeight();
-//    }
 }
