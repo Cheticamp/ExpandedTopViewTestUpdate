@@ -5,7 +5,6 @@ import android.support.v4.view.ViewCompat
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.util.AttributeSet
-import android.util.Log
 import android.view.View
 import android.view.ViewConfiguration
 
@@ -21,8 +20,7 @@ class MyRecyclerView @JvmOverloads constructor(context: Context, attrs: Attribut
         fun isAppBarExpanded(): Boolean
     }
 
-    override fun dispatchNestedPreScroll(dx: Int, dy: Int, consumed: IntArray?, offsetInWindow: IntArray?,
-                                         type: Int): Boolean {
+    override fun dispatchNestedPreScroll(dx: Int, dy: Int, consumed: IntArray?, offsetInWindow: IntArray?, type: Int): Boolean {
         if (type == ViewCompat.TYPE_NON_TOUCH && mAppBarTracking!!.isAppBarIdle()
                 && isNestedScrollingEnabled) {
             if (dy > 0) {
@@ -40,6 +38,10 @@ class MyRecyclerView @JvmOverloads constructor(context: Context, attrs: Attribut
                     }
                 }
             }
+        }
+        if (dy < 0 && type == ViewCompat.TYPE_TOUCH && mAppBarTracking!!.isAppBarExpanded()) {
+            consumed!![1] = dy
+            return true
         }
 
         val returnValue = super.dispatchNestedPreScroll(dx, dy, consumed, offsetInWindow, type)
@@ -59,7 +61,6 @@ class MyRecyclerView @JvmOverloads constructor(context: Context, attrs: Attribut
 
     override fun fling(velocityX: Int, velocityY: Int): Boolean {
         var velocityY = velocityY
-        Log.d("Recycler", "<<<<velocity=" + velocityY)
         if (!mAppBarTracking!!.isAppBarIdle()) {
             val vc = ViewConfiguration.get(context)
             velocityY = if (velocityY < 0) -vc.scaledMinimumFlingVelocity
